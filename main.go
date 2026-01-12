@@ -89,7 +89,7 @@ func main() {
 		},
 	)
 
-	// Clic sur un artiste → image + détails
+	// Clic sur un artiste → image + détails + concerts
 	list.OnSelected = func(i int) {
 		if i < 0 || i >= len(filtered) {
 			return
@@ -97,16 +97,36 @@ func main() {
 
 		ar := filtered[i]
 
+		// Charger l'image
 		res := loadImageFromURL(ar.Image)
 		if res != nil {
 			img.Resource = res
 			img.Refresh()
 		}
 
-		details.SetText(fmt.Sprintf(
+		// Infos de base
+		info := fmt.Sprintf(
 			"Nom : %s\nCréation : %d\nPremier album : %s\nMembres : %v",
 			ar.Name, ar.CreationDate, ar.FirstAlbum, ar.Members,
-		))
+		)
+
+		// Charger les relations (lieux + dates)
+		rel, err := internal.LoadRelations(ar.Relations)
+		if err == nil {
+			info += "\n\nConcerts :\n\n"
+			for city, dates := range rel.DatesLocations {
+				info += city + " :\n"
+				for _, d := range dates {
+					info += "  - " + d + "\n"
+				}
+				info += "\n"
+			}
+		} else {
+			info += "\n\nImpossible de charger les concerts."
+		}
+
+		// Afficher dans le panneau de droite
+		details.SetText(info)
 	}
 
 	// 🔍 Filtrage par recherche (nom + membres)
