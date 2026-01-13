@@ -116,18 +116,3 @@ London :
 - Colonne droite : image + détails + concerts
 
 ---
-
-## 👤 **Auteur**
-
-Projet réalisé par **Lucas**, dans le cadre du module Groupie Tracker.
-
----
-
-Si tu veux, je peux aussi te faire :
-
-- une version anglaise  
-- une version plus courte  
-- une version avec captures d’écran (texte seulement)  
-- une version “projet GitHub” avec badges  
-
-Tu veux laquelle, Lucas.
