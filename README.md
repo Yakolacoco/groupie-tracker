@@ -1,6 +1,3 @@
-Voici un **README propre, clair, professionnel**, parfaitement adapté à TON projet Groupie Tracker en Go + Fyne.  
-Il est minimal, structuré, et exactement ce qu’un correcteur attend.
-
 ---
 
 # 📌 **Groupie Tracker – Application Go / Fyne**
