@@ -6,7 +6,6 @@ import (
 	"image/jpeg"
 	"image/png"
 	"net/http"
-	"strings"
 
 	"groupie-tracker/internal"
 
@@ -50,6 +49,7 @@ func loadImageFromURL(url string) fyne.Resource {
 	return fyne.NewStaticResource("img", buf)
 }
 
+// créer app du projet
 func main() {
 	a := app.New()
 	w := a.NewWindow("Groupie Tracker")
@@ -66,9 +66,17 @@ func main() {
 	filtered := make([]internal.Artist, len(artists))
 	copy(filtered, artists)
 
-	// Barre de recherche
-	search := widget.NewEntry()
-	search.SetPlaceHolder("Rechercher un artiste ou un membre...")
+	// Liste des artistes (gauche)
+	list := widget.NewList(
+		func() int { return len(filtered) },
+		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func(i int, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(filtered[i].Name)
+		},
+	)
+
+	// Barre de recherche (dans internal/search.go)
+	search := internal.NewSearchBar(artists, &filtered, list)
 
 	// Panneau de droite : image + texte
 	img := canvas.NewImageFromResource(nil)
@@ -79,15 +87,6 @@ func main() {
 	details.Wrapping = fyne.TextWrapWord
 
 	rightPanel := container.NewVBox(img, details)
-
-	// Liste des artistes (gauche)
-	list := widget.NewList(
-		func() int { return len(filtered) },
-		func() fyne.CanvasObject { return widget.NewLabel("") },
-		func(i int, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(filtered[i].Name)
-		},
-	)
 
 	// Clic sur un artiste → image + détails + concerts
 	list.OnSelected = func(i int) {
@@ -127,34 +126,6 @@ func main() {
 
 		// Afficher dans le panneau de droite
 		details.SetText(info)
-	}
-
-	// 🔍 Filtrage par recherche (nom + membres)
-	search.OnChanged = func(text string) {
-		t := strings.ToLower(strings.TrimSpace(text))
-		filtered = filtered[:0]
-
-		if t == "" {
-			filtered = append(filtered, artists...)
-		} else {
-			for _, ar := range artists {
-				nameMatch := strings.Contains(strings.ToLower(ar.Name), t)
-				memberMatch := false
-
-				for _, m := range ar.Members {
-					if strings.Contains(strings.ToLower(m), t) {
-						memberMatch = true
-						break
-					}
-				}
-
-				if nameMatch || memberMatch {
-					filtered = append(filtered, ar)
-				}
-			}
-		}
-
-		list.Refresh()
 	}
 
 	// Colonne gauche : recherche + liste
