@@ -75,8 +75,20 @@ func main() {
 		},
 	)
 
-	// Barre de recherche (dans internal/search.go)
+	// Barre de recherche
 	search := internal.NewSearchBar(artists, &filtered, list)
+
+	// bouton filtre
+	years := []string{"Toutes", "1960", "1970", "1980", "1990", "2000", "2010"}
+
+	yearSelect := widget.NewSelect(years, func(value string) {
+		filtered = internal.FilterByYear(artists, value)
+		list.Refresh()
+	})
+
+	filters := container.NewHBox(
+		yearSelect,
+	)
 
 	// Panneau de droite : image + texte
 	img := canvas.NewImageFromResource(nil)
@@ -128,10 +140,12 @@ func main() {
 		details.SetText(info)
 	}
 
-	// Colonne gauche : recherche + liste
+	// Colonne gauche : recherche + filtres + liste
 	leftTop := container.NewVBox(
 		widget.NewLabel("Recherche :"),
 		search,
+		widget.NewLabel("Filtres :"),
+		filters,
 		widget.NewLabel("Artistes :"),
 	)
 

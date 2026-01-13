@@ -1,12 +1,16 @@
 package internal
 
 import (
+	"strconv"
 	"strings"
 
 	"fyne.io/fyne/v2/widget"
 )
 
-// Filtre les artistes
+// ---------------------------------------------------------
+// Recherche principale (nom + membres)
+// ---------------------------------------------------------
+
 func FilterArtists(all []Artist, query string) []Artist {
 	t := strings.ToLower(strings.TrimSpace(query))
 	filtered := []Artist{}
@@ -34,7 +38,10 @@ func FilterArtists(all []Artist, query string) []Artist {
 	return filtered
 }
 
-// Crée la barre de recherche + gère le filtrage
+// ---------------------------------------------------------
+// Barre de recherche
+// ---------------------------------------------------------
+
 func NewSearchBar(artists []Artist, filtered *[]Artist, list *widget.List) *widget.Entry {
 	search := widget.NewEntry()
 	search.SetPlaceHolder("Rechercher un artiste ou un membre...")
@@ -45,4 +52,28 @@ func NewSearchBar(artists []Artist, filtered *[]Artist, list *widget.List) *widg
 	}
 
 	return search
+}
+
+// ---------------------------------------------------------
+// Filtre par décennie (1960 → 1960 à 1969)
+// ---------------------------------------------------------
+
+func FilterByYear(all []Artist, year string) []Artist {
+	if year == "Toutes" {
+		return all
+	}
+
+	var filtered []Artist
+
+	// Convertit "1960" → 1960
+	start, _ := strconv.Atoi(year)
+	end := start + 9 // 1960 → 1969
+
+	for _, a := range all {
+		if a.CreationDate >= start && a.CreationDate <= end {
+			filtered = append(filtered, a)
+		}
+	}
+
+	return filtered
 }
