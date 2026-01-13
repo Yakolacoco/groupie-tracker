@@ -44,8 +44,10 @@ groupie-tracker/
 ├── main.go
 │
 └── internal/
-    ├── types.go       // Struct Artist + Relations
-    ├── fetch.go       // LoadArtists() + LoadRelations()
+    ├── types.go       
+    ├── fetch.go     
+    ├── search.go       
+    ├── geo.go   
 ```
 
 ---
