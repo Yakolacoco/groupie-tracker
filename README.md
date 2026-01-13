@@ -42,7 +42,8 @@ Endpoints utilisés :
 groupie-tracker/
 │
 ├── main.go
-│
+│── go.mod
+│── go.sum
 └── internal/
     ├── types.go       
     ├── fetch.go     
