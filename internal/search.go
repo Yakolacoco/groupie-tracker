@@ -7,10 +7,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// ---------------------------------------------------------
 // Recherche principale (nom + membres)
-// ---------------------------------------------------------
-
 func FilterArtists(all []Artist, query string) []Artist {
 	t := strings.ToLower(strings.TrimSpace(query))
 	filtered := []Artist{}
@@ -38,10 +35,7 @@ func FilterArtists(all []Artist, query string) []Artist {
 	return filtered
 }
 
-// ---------------------------------------------------------
 // Barre de recherche
-// ---------------------------------------------------------
-
 func NewSearchBar(artists []Artist, filtered *[]Artist, list *widget.List) *widget.Entry {
 	search := widget.NewEntry()
 	search.SetPlaceHolder("Rechercher un artiste ou un membre...")
@@ -54,10 +48,7 @@ func NewSearchBar(artists []Artist, filtered *[]Artist, list *widget.List) *widg
 	return search
 }
 
-// ---------------------------------------------------------
 // Filtre par décennie (1960 → 1960 à 1969)
-// ---------------------------------------------------------
-
 func FilterByYear(all []Artist, year string) []Artist {
 	if year == "Toutes" {
 		return all
